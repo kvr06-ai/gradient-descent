@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizing Gradient Descent Optimization</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjs@11.8.0/lib/browser/math.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Visualizing Gradient Descent Optimization</h1>
+        <p class="subtitle">A journey through the landscapes of machine learning optimization algorithms</p>
+    </header>
+    
+    <main>
+        <section id="introduction">
+            <h2>1. Introduction: The Optimization Journey</h2>
+            <p>How do neural networks learn? Imagine trying to find the lowest point in a mountain range while blindfolded. This is the essential challenge of optimization in machine learning – finding the minimum of a function when you can only feel your immediate surroundings.</p>
+            <p>Optimization lies at the heart of all machine learning algorithms. When we talk about a model "learning," what we're really describing is an optimization process that incrementally adjusts parameters to minimize error. Whether you're training a simple linear regression or a complex neural network with millions of parameters, the core challenge remains the same: navigating a complex landscape to find the optimal solution.</p>
+            <p>The algorithms that guide this process – gradient descent and its variants – represent some of the most fundamental yet powerful tools in machine learning. They transform the abstract concept of "learning" into concrete mathematical procedures that can be implemented and visualized.</p>
+            <p>By the end of this article, you'll see optimization in action and understand why small tweaks to algorithms can mean the difference between success and failure. Through interactive visualizations and clear explanations, we'll demystify the optimization techniques that power modern AI systems.</p>
+        </section>
+
+        <section id="loss-landscape">
+            <h2>2. Understanding the Loss Landscape</h2>
+            <p>Before diving into optimization algorithms, we need to understand what they're navigating: the loss landscape. This geometric representation of a model's error provides crucial intuition about the optimization process.</p>
+            <p>A loss function measures how well a model is performing – the lower the loss, the better the model's predictions. When we visualize this function across all possible parameter values, we get a "landscape" with hills, valleys, and other features that our optimization algorithm must traverse.</p>
+            
+            <div class="interactive-demo">
+                <h3>Interactive 2D Loss Function</h3>
+                <p>Drag the point to any starting position and watch how gradient descent finds the minimum.</p>
+                <div id="simple-2d-demo" class="visualization-container"></div>
+                <div class="controls">
+                    <button id="run-2d-descent">Run Gradient Descent</button>
+                    <button id="reset-2d-descent">Reset</button>
+                    <div class="slider-container">
+                        <label for="learning-rate-2d">Learning Rate:</label>
+                        <input type="range" id="learning-rate-2d" min="0.01" max="1" step="0.01" value="0.1">
+                        <span id="learning-rate-2d-value">0.1</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="interactive-demo">
+                <h3>3D Loss Landscape Visualization</h3>
+                <p>Explore different loss surfaces by rotating and zooming. These represent common optimization challenges in machine learning.</p>
+                <div id="3d-landscape" class="visualization-container"></div>
+                <div class="controls">
+                    <select id="surface-select">
+                        <option value="convex">Convex Function</option>
+                        <option value="nonconvex">Non-Convex Function</option>
+                        <option value="saddle">Saddle Point</option>
+                        <option value="ravine">Ravine (Pathological Curvature)</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section id="vanilla-gd">
+            <h2>3. Vanilla Gradient Descent: The Fundamentals</h2>
+            <p>Gradient descent is founded on a simple principle: to find the minimum of a function, follow the negative gradient. The gradient acts as a compass, always pointing in the direction of steepest increase. By moving in the opposite direction, we descend toward lower values.</p>
+            <p>Mathematically, gradient descent updates parameters using the formula: θ<sub>new</sub> = θ<sub>old</sub> - η∇J(θ), where η is the learning rate and ∇J(θ) is the gradient of the loss function.</p>
+            
+            <div class="interactive-demo">
+                <h3>Gradient Descent in Action</h3>
+                <p>Adjust the learning rate and observe how it affects convergence.</p>
+                <div id="gd-demo" class="visualization-container"></div>
+                <div class="controls">
+                    <div class="slider-container">
+                        <label for="learning-rate-gd">Learning Rate:</label>
+                        <input type="range" id="learning-rate-gd" min="0.01" max="2" step="0.01" value="0.1">
+                        <span id="learning-rate-gd-value">0.1</span>
+                    </div>
+                    <button id="run-gd">Run</button>
+                    <button id="reset-gd">Reset</button>
+                </div>
+                <div class="comparison-container">
+                    <div>
+                        <h4>Too Small</h4>
+                        <div id="gd-small" class="small-viz"></div>
+                        <p>Slow convergence with tiny steps</p>
+                    </div>
+                    <div>
+                        <h4>Too Large</h4>
+                        <div id="gd-large" class="small-viz"></div>
+                        <p>Oscillation or divergence due to overshooting</p>
+                    </div>
+                    <div>
+                        <h4>Just Right</h4>
+                        <div id="gd-optimal" class="small-viz"></div>
+                        <p>Smooth convergence to minimum</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="momentum">
+            <h2>4. Momentum: Adding a Memory to Gradient Descent</h2>
+            <p>Vanilla gradient descent can struggle with flat regions and narrow valleys. Momentum addresses these challenges by adding a "memory" of previous update directions.</p>
+            <p>Think of momentum as a ball rolling downhill. It gradually builds up speed in consistent directions while dampening oscillations. Mathematically, we introduce a velocity term that persists between updates: v = γv - η∇J(θ), followed by θ<sub>new</sub> = θ<sub>old</sub> + v.</p>
+            
+            <div class="interactive-demo">
+                <h3>Gradient Descent vs. Momentum</h3>
+                <p>Compare vanilla gradient descent with momentum on challenging functions.</p>
+                <div class="comparison-container">
+                    <div>
+                        <h4>Vanilla Gradient Descent</h4>
+                        <div id="vanilla-gd-viz" class="comparison-viz"></div>
+                    </div>
+                    <div>
+                        <h4>Gradient Descent with Momentum</h4>
+                        <div id="momentum-viz" class="comparison-viz"></div>
+                    </div>
+                </div>
+                <div class="controls">
+                    <div class="slider-container">
+                        <label for="momentum-value">Momentum:</label>
+                        <input type="range" id="momentum-value" min="0" max="0.99" step="0.01" value="0.9">
+                        <span id="momentum-value-display">0.9</span>
+                    </div>
+                    <button id="run-momentum">Run</button>
+                    <button id="reset-momentum">Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="adaptive-methods">
+            <h2>5. Learning Rate Schedules and Adaptive Methods</h2>
+            <p>Fixed learning rates often prove problematic in practice. A rate that works well initially may become too large or too small as training progresses. This is where learning rate schedules and adaptive methods come in.</p>
+            
+            <div class="interactive-demo">
+                <h3>Learning Rate Schedules</h3>
+                <p>Observe how different learning rate schedules affect optimization.</p>
+                <div id="lr-schedule-viz" class="visualization-container"></div>
+                <div class="controls">
+                    <select id="schedule-select">
+                        <option value="constant">Constant</option>
+                        <option value="step">Step Decay</option>
+                        <option value="exponential">Exponential Decay</option>
+                        <option value="cosine">Cosine Annealing</option>
+                    </select>
+                    <button id="run-schedule">Run</button>
+                    <button id="reset-schedule">Reset</button>
+                </div>
+            </div>
+            
+            <div class="interactive-demo">
+                <h3>Adaptive Optimization Methods</h3>
+                <p>Compare AdaGrad and RMSProp on challenging functions.</p>
+                <div class="comparison-container">
+                    <div>
+                        <h4>AdaGrad</h4>
+                        <div id="adagrad-viz" class="comparison-viz"></div>
+                    </div>
+                    <div>
+                        <h4>RMSProp</h4>
+                        <div id="rmsprop-viz" class="comparison-viz"></div>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button id="run-adaptive">Run</button>
+                    <button id="reset-adaptive">Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="adam">
+            <h2>6. The Adam Optimizer: Combining the Best Ideas</h2>
+            <p>Adam (Adaptive Moment Estimation) combines the benefits of momentum with adaptive learning rates for each parameter. It maintains both a velocity term (like momentum) and a term that adapts the learning rate based on historical gradients (similar to RMSProp).</p>
+            
+            <div class="interactive-demo">
+                <h3>Optimizer Comparison</h3>
+                <p>See how different optimizers perform on the same challenging loss landscape.</p>
+                <div class="comparison-container four-way">
+                    <div>
+                        <h4>Gradient Descent</h4>
+                        <div id="gd-compare" class="small-viz"></div>
+                    </div>
+                    <div>
+                        <h4>Momentum</h4>
+                        <div id="momentum-compare" class="small-viz"></div>
+                    </div>
+                    <div>
+                        <h4>RMSProp</h4>
+                        <div id="rmsprop-compare" class="small-viz"></div>
+                    </div>
+                    <div>
+                        <h4>Adam</h4>
+                        <div id="adam-compare" class="small-viz"></div>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button id="run-comparison">Run Comparison</button>
+                    <button id="reset-comparison">Reset</button>
+                    <select id="comparison-function">
+                        <option value="rosenbrock">Rosenbrock Function</option>
+                        <option value="beale">Beale Function</option>
+                        <option value="himmelblau">Himmelblau's Function</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section id="challenges">
+            <h2>7. Real-world Optimization Challenges</h2>
+            <p>In practice, optimization faces challenges beyond what we can easily visualize. High-dimensional spaces, noisy gradients, and initialization sensitivity all affect performance.</p>
+            
+            <div class="interactive-demo">
+                <h3>Batch Size Effects</h3>
+                <p>Observe how batch size affects the optimization trajectory.</p>
+                <div id="batch-size-viz" class="visualization-container"></div>
+                <div class="controls">
+                    <div class="slider-container">
+                        <label for="batch-size">Batch Size:</label>
+                        <input type="range" id="batch-size" min="1" max="100" step="1" value="10">
+                        <span id="batch-size-value">10</span>
+                    </div>
+                    <button id="run-batch">Run</button>
+                    <button id="reset-batch">Reset</button>
+                </div>
+            </div>
+            
+            <div class="interactive-demo">
+                <h3>Initialization Matters</h3>
+                <p>See how different initializations affect convergence with various optimizers.</p>
+                <div id="initialization-viz" class="visualization-container"></div>
+                <div class="controls">
+                    <select id="init-optimizer">
+                        <option value="gd">Gradient Descent</option>
+                        <option value="momentum">Momentum</option>
+                        <option value="adam">Adam</option>
+                    </select>
+                    <button id="randomize-init">Randomize Initialization</button>
+                    <button id="run-init">Run</button>
+                    <button id="reset-init">Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="advanced">
+            <h2>8. Beyond the Basics: Advanced Optimization Techniques</h2>
+            <p>While first-order methods like gradient descent and its variants form the backbone of modern deep learning optimization, several advanced techniques can offer advantages in specific scenarios.</p>
+            
+            <div class="interactive-demo">
+                <h3>Modern Optimizer Visualization</h3>
+                <p>Explore newer optimization techniques and their behaviors.</p>
+                <div id="advanced-viz" class="visualization-container"></div>
+                <div class="controls">
+                    <select id="advanced-optimizer">
+                        <option value="sgd">SGD</option>
+                        <option value="adam">Adam</option>
+                        <option value="radam">RAdam</option>
+                        <option value="lookahead">Lookahead</option>
+                    </select>
+                    <button id="run-advanced">Run</button>
+                    <button id="reset-advanced">Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="implementation">
+            <h2>9. Practical Implementation Guide</h2>
+            <p>Implementing optimizers correctly requires attention to detail. Let's look at code examples and practical tips.</p>
+            
+            <div class="code-container">
+                <h3>Vanilla Gradient Descent Implementation</h3>
+                <pre><code class="language-python">
+def gradient_descent(gradient_func, initial_params, learning_rate=0.1, n_iterations=100):
+    """
+    Vanilla gradient descent implementation.
+    
+    Parameters:
+    -----------
+    gradient_func : function
+        Function that calculates the gradient at given parameters
+    initial_params : array-like
+        Starting parameter values
+    learning_rate : float
+        Step size for parameter updates
+    n_iterations : int
+        Number of iterations to run
+        
+    Returns:
+    --------
+    params_history : list
+        History of parameter values during optimization
+    """
+    params = np.array(initial_params, dtype=float)
+    params_history = [params.copy()]
+    
+    for _ in range(n_iterations):
+        # Calculate gradient at current parameters
+        gradient = gradient_func(params)
+        
+        # Update parameters in the negative gradient direction
+        params = params - learning_rate * gradient
+        
+        # Store parameters for visualization
+        params_history.append(params.copy())
+        
+    return params_history
+                </code></pre>
+            </div>
+            
+            <div class="code-container">
+                <h3>Momentum Implementation</h3>
+                <pre><code class="language-python">
+def momentum(gradient_func, initial_params, learning_rate=0.1, 
+             momentum=0.9, n_iterations=100):
+    """
+    Gradient descent with momentum implementation.
+    
+    Parameters:
+    -----------
+    gradient_func : function
+        Function that calculates the gradient at given parameters
+    initial_params : array-like
+        Starting parameter values
+    learning_rate : float
+        Step size for parameter updates
+    momentum : float
+        Momentum coefficient (typically between 0.8 and 0.99)
+    n_iterations : int
+        Number of iterations to run
+        
+    Returns:
+    --------
+    params_history : list
+        History of parameter values during optimization
+    """
+    params = np.array(initial_params, dtype=float)
+    velocity = np.zeros_like(params)
+    params_history = [params.copy()]
+    
+    for _ in range(n_iterations):
+        # Calculate gradient at current parameters
+        gradient = gradient_func(params)
+        
+        # Update velocity (momentum term)
+        velocity = momentum * velocity - learning_rate * gradient
+        
+        # Update parameters using velocity
+        params = params + velocity
+        
+        # Store parameters for visualization
+        params_history.append(params.copy())
+        
+    return params_history
+                </code></pre>
+            </div>
+            
+            <div class="code-container">
+                <h3>Adam Implementation</h3>
+                <pre><code class="language-python">
+def adam(gradient_func, initial_params, learning_rate=0.001,
+         beta1=0.9, beta2=0.999, epsilon=1e-8, n_iterations=100):
+    """
+    Adam optimizer implementation.
+    
+    Parameters:
+    -----------
+    gradient_func : function
+        Function that calculates the gradient at given parameters
+    initial_params : array-like
+        Starting parameter values
+    learning_rate : float
+        Step size for parameter updates
+    beta1 : float
+        Exponential decay rate for first moment estimates
+    beta2 : float
+        Exponential decay rate for second moment estimates
+    epsilon : float
+        Small constant for numerical stability
+    n_iterations : int
+        Number of iterations to run
+        
+    Returns:
+    --------
+    params_history : list
+        History of parameter values during optimization
+    """
+    params = np.array(initial_params, dtype=float)
+    m = np.zeros_like(params)  # First moment estimate
+    v = np.zeros_like(params)  # Second moment estimate
+    params_history = [params.copy()]
+    
+    for t in range(1, n_iterations + 1):
+        # Calculate gradient at current parameters
+        gradient = gradient_func(params)
+        
+        # Update biased first moment estimate
+        m = beta1 * m + (1 - beta1) * gradient
+        
+        # Update biased second moment estimate
+        v = beta2 * v + (1 - beta2) * gradient**2
+        
+        # Correct bias in first moment
+        m_corrected = m / (1 - beta1**t)
+        
+        # Correct bias in second moment
+        v_corrected = v / (1 - beta2**t)
+        
+        # Update parameters
+        params = params - learning_rate * m_corrected / (np.sqrt(v_corrected) + epsilon)
+        
+        # Store parameters for visualization
+        params_history.append(params.copy())
+        
+    return params_history
+                </code></pre>
+            </div>
+            
+            <div class="common-pitfalls">
+                <h3>Common Pitfalls and Diagnostics</h3>
+                <ul>
+                    <li><strong>Loss Not Decreasing:</strong> Learning rate may be too large, causing divergence, or too small, causing slow progress.</li>
+                    <li><strong>Oscillation:</strong> Reduce learning rate or add momentum to dampen oscillations.</li>
+                    <li><strong>Premature Convergence:</strong> You might be stuck in a local minimum. Try different initializations or more advanced optimizers.</li>
+                    <li><strong>Vanishing Gradients:</strong> In deep networks, consider normalized initialization and activation functions like ReLU.</li>
+                    <li><strong>Exploding Gradients:</strong> Implement gradient clipping or normalize gradients.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="conclusion">
+            <h2>10. Conclusion: Choosing Your Path Down the Mountain</h2>
+            <p>Throughout this journey, we've explored the landscape of optimization algorithms that power machine learning. From the simple yet powerful gradient descent to sophisticated adaptive methods like Adam, each approach offers unique advantages for different scenarios.</p>
+            <p>When choosing an optimizer for your projects, consider the nature of your problem, the structure of your model, and your computational constraints. While Adam often performs well as a default choice, other methods may excel in specific contexts.</p>
+            <p>The visualizations in this article offer intuition, but the real test comes in applying these methods to your own problems. Remember that optimization is both an art and a science – theoretical understanding must be paired with practical experimentation.</p>
+            
+            <div class="interactive-demo">
+                <h3>Final Challenge: Optimize Faster Than Adam!</h3>
+                <p>Can you tune a simpler optimizer to outperform Adam on this function?</p>
+                <div id="challenge-viz" class="visualization-container"></div>
+                <div class="controls">
+                    <select id="challenge-optimizer">
+                        <option value="gd">Gradient Descent</option>
+                        <option value="momentum">Momentum</option>
+                        <option value="rmsprop">RMSProp</option>
+                        <option value="adam">Adam (baseline)</option>
+                    </select>
+                    <div class="slider-container">
+                        <label for="challenge-lr">Learning Rate:</label>
+                        <input type="range" id="challenge-lr" min="0.001" max="1" step="0.001" value="0.01">
+                        <span id="challenge-lr-value">0.01</span>
+                    </div>
+                    <div class="slider-container" id="momentum-slider" style="display: none;">
+                        <label for="challenge-momentum">Momentum:</label>
+                        <input type="range" id="challenge-momentum" min="0" max="0.99" step="0.01" value="0.9">
+                        <span id="challenge-momentum-value">0.9</span>
+                    </div>
+                    <button id="run-challenge">Run</button>
+                    <button id="reset-challenge">Reset</button>
+                </div>
+                <div id="challenge-results"></div>
+            </div>
+            
+            <h3>Further Resources</h3>
+            <ul>
+                <li><a href="https://arxiv.org/abs/1609.04747" target="_blank">An Overview of Gradient Descent Optimization Algorithms</a> by Sebastian Ruder</li>
+                <li><a href="https://arxiv.org/abs/1412.6980" target="_blank">Adam: A Method for Stochastic Optimization</a> by Diederik P. Kingma and Jimmy Ba</li>
+                <li><a href="https://distill.pub/2017/momentum/" target="_blank">Why Momentum Really Works</a> by Gabriel Goh (Distill)</li>
+                <li><a href="https://www.deeplearningbook.org/" target="_blank">Deep Learning</a> by Ian Goodfellow, Yoshua Bengio, and Aaron Courville (Chapter 8)</li>
+            </ul>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 Gradient Descent Visualization</p>
+    </footer>
+
+    <!-- Load JavaScript files -->
+    <script src="js/utils.js"></script>
+    <script src="js/loss-functions.js"></script>
+    <script src="js/optimizers.js"></script>
+    <script src="js/visualizations.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 
