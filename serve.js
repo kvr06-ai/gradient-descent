@@ -11,7 +11,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // MIME types for different file extensions
 const MIME_TYPES = {
@@ -67,8 +67,9 @@ const server = http.createServer((req, res) => {
     });
 });
 
-// Start server
-server.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}/`);
+// Start server - listen on all interfaces for cloud deployment
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running at http://0.0.0.0:${PORT}/`);
+    console.log(`On your local machine, access at http://localhost:${PORT}/`);
     console.log('Press Ctrl+C to stop the server');
 }); 

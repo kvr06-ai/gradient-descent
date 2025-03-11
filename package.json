@@ -1,0 +1,27 @@
+{
+  "name": "gradient-descent-visualization",
+  "version": "1.0.0",
+  "description": "Interactive visualization of gradient descent algorithms",
+  "main": "serve.js",
+  "scripts": {
+    "start": "node serve.js",
+    "dev": "node serve.js"
+  },
+  "engines": {
+    "node": ">=14.x"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kvr06-ai/gradient-descent.git"
+  },
+  "keywords": [
+    "gradient-descent",
+    "machine-learning",
+    "visualization",
+    "optimization",
+    "interactive"
+  ],
+  "author": "",
+  "license": "MIT"
+} 
