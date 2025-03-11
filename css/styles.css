@@ -225,7 +225,7 @@ li {
 
 .common-pitfalls ul {
     list-style-type: none;
-    margin-left: 0;
+    padding-left: 0;
 }
 
 .common-pitfalls li {
@@ -234,6 +234,44 @@ li {
     background-color: var(--background-color);
     border: 1px solid var(--border-color);
     border-radius: 4px;
+}
+
+/* Math explanation sections */
+.math-explanation {
+    background-color: var(--light-bg);
+    border-left: 4px solid var(--primary-color);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 0 4px 4px 0;
+}
+
+.math-explanation h3 {
+    color: var(--primary-color);
+    margin-top: 0;
+}
+
+.math-explanation h4 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: var(--secondary-color);
+}
+
+.math-explanation p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.math-explanation ul, .math-explanation ol {
+    padding-left: 25px;
+    margin-bottom: 15px;
+}
+
+.math-explanation li {
+    margin-bottom: 8px;
+}
+
+.math-explanation li p {
+    margin-bottom: 8px;
 }
 
 /* Responsive design */
