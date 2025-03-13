@@ -1,6 +1,6 @@
 # Visualizing Gradient Descent Optimization
 
-An interactive article that allows you to explore optimization algorithms used in machine learning through visual demonstrations and interactive examples.
+An interactive article that allows you to explore optimization algorithms used in machine learning through visual demonstrations and interactive examples. You can read the interactive version of this article here: https://kaushikrajan.me/blog/gradient-descent/ 
 
 ## Overview
 
